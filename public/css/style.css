@@ -30,9 +30,9 @@ body {
 
 /* Hide styling */
 
-.hide {
+/* .hide {
   display: none !important;
-}
+} */
 
 /* Header styling */
 
@@ -46,10 +46,6 @@ header {
 
 header * {
   color: #fff;
-}
-
-button {
-  color: #000;
 }
 
 a {
@@ -74,6 +70,12 @@ main a {
 }
 
 main .search {
+  margin-left: 1rem;
+}
+
+/* Contacts styling */
+
+.contacts .delete {
   margin-left: 1rem;
 }
 
@@ -127,4 +129,24 @@ main .search {
 .add form button:hover {
   cursor: pointer;
   opacity: 0.7;
+}
+
+/* Selected Contact styling */
+
+.selected-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selected-contact div {
+  
+}
+
+.selected-contact div h1 {
+  margin-bottom: 1.5rem;
+}
+
+.selected-contact div p {
+  margin-bottom: 0.5rem;
 }
