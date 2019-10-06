@@ -1,5 +1,10 @@
 import buildHeaderAndMain from './layout.js';
+import frontendRouter from './router.js';
+
 buildHeaderAndMain();
+
+frontendRouter(location.pathname);
+
 let contacts = [];
 
 const buildContact = name => {
@@ -25,3 +30,13 @@ buildContact('Samantha');
 contacts.map(contact =>
   document.querySelector('.contacts').innerHTML += contact
 );
+
+window.addEventListener('click', e => {
+  e.preventDefault();
+
+  if (e.target.closest('a')) {
+    const link = e.target.closest('a').getAttribute('href');
+    history.pushState(null, null, link);
+    frontendRouter(link);
+  }
+});
