@@ -54,15 +54,39 @@ class UI {
           <button class="btn-save">Spara</button>
         </form>
       </section>
-      <section class="selected-contact">
-        <div>
-          <h1 class="selected-name">Samantha</h1>
-          <p class="selected-phone">Telefon: <span>0707644525</span></p>
-          <p class="selected-email">E-post: <span>joel.pedersen97@gmail.com</span></p>
-        </div>
-      </section>
+      <section class="selected-contact"></section>
     </div>
   `;
+  }
+
+  static buildSelectedContact() {
+    const data = {
+      name: 'Joel',
+      phoneNumbers: ['0707644525', '0704824666'],
+      emails: ['joel.pedersen97@gmail.com', 'mack-14@hotmail.com']
+    }
+
+    const contact = /*html*/`
+      <div class="selected-container">
+        <h1 class="selected-name">${data.name}</h1>
+      </div>`;
+    document.querySelector('.selected-contact').innerHTML = contact;
+
+    const renderContactInfo = (arrayOfInfo, title, cssClass) => {
+      arrayOfInfo.forEach(info => {
+        const element = document.createElement('p');
+        element.classList.add(`${cssClass}`);
+        element.innerHTML = `${title}: <span>${info}</span>`
+        document.querySelector('.selected-name').insertAdjacentElement('afterend', element);
+      });
+    }
+
+    if (data.emails.length) {
+      renderContactInfo(data.emails, 'Email', 'selected-email');
+    }
+    if (data.phoneNumbers.length) {
+      renderContactInfo(data.phoneNumbers, 'Telefon', 'selected-phone');
+    }
   }
 
   static renderContacts() {

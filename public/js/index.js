@@ -5,6 +5,8 @@ UI.buildHeaderAndMain();
 
 UI.renderContacts();
 
+UI.buildSelectedContact();
+
 Router.frontendRouter(location.pathname);
 
 window.addEventListener('click', e => {
