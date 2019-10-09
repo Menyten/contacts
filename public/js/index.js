@@ -15,9 +15,6 @@ window.addEventListener('click', e => {
     history.pushState(null, null, link);
     Router.frontendRouter(link);
     if (e.target.classList.contains('select-contact')) {
-      // renderSelectedContact should take the contact object to render
-      console.log(link.substr(1));
-      
       UI.renderSelectedContact(link.substr(1));
     }
   } else if (e.target.classList.contains('btn-field')) {
@@ -27,4 +24,8 @@ window.addEventListener('click', e => {
   } else if (e.target.classList.contains('delete')) {
     UI.removeContact(e);
   }
+});
+
+window.addEventListener("popstate", () => {
+  Router.frontendRouter(location.pathname);
 });
