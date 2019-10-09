@@ -1,8 +1,9 @@
 class Contact {
-  constructor(name, phone, email) {
+  constructor(name, phoneNumbers = [], emails = []) {
     this.name = name;
-    this.phone = phone;
-    this.email = email;
+    this.phoneNumbers = phoneNumbers;
+    this.emails = emails;
+    this.history = [];
   }
 }
 

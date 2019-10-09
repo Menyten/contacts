@@ -3,12 +3,12 @@ import Contact from './Contact.js';
 
 class UI {
 
-  static buildContact({ name, phone }) {
+  static buildContact({ name }) {
     const contact = /*html*/`
-    <article class="contact" id="${phone}">
+    <article class="contact" id="${name}">
       <p>${name}</p>
       <div>
-        <a href="/${name}">
+        <a class="select-contact" href="/${name}">
           Gå till kontakt
         </a>
         <button class="delete">
@@ -51,6 +51,7 @@ class UI {
             <label>E-post</label>
             <input type="email" class="email"/>
           </div>
+          <button type="button" class="btn-field">Lägg till nytt fält</button>
           <button class="btn-save">Spara</button>
         </form>
       </section>
@@ -59,18 +60,32 @@ class UI {
   `;
   }
 
-  static buildSelectedContact() {
-    const data = {
-      name: 'Joel',
-      phoneNumbers: ['0707644525', '0704824666'],
-      emails: ['joel.pedersen97@gmail.com', 'mack-14@hotmail.com']
-    }
+  static insertNewField() {
+    const group = document.createElement('div');
+    group.classList.add('input-group');
 
-    const contact = /*html*/`
+    const fields = /* html */`
+      <select id="select">
+        <option value="phone">Mobil</option>
+        <option value="email">E-post</option>
+      </select>
+      <input type="text" class="new-input"/>
+    `;
+    group.innerHTML = fields;
+    const form = document.querySelector('#add');
+    form.insertBefore(group, form.childNodes[7]);
+  }
+
+  static renderSelectedContact(contactName) {
+    const contacts = Store.getContacts()
+    const contact = contacts.find(({ name }) => name === contactName);
+    console.log(contact);
+    
+    const contactHtml = /*html*/`
       <div class="selected-container">
-        <h1 class="selected-name">${data.name}</h1>
+        <h1 class="selected-name">${contact.name}</h1>
       </div>`;
-    document.querySelector('.selected-contact').innerHTML = contact;
+    document.querySelector('.selected-contact').innerHTML = contactHtml;
 
     const renderContactInfo = (arrayOfInfo, title, cssClass) => {
       arrayOfInfo.forEach(info => {
@@ -81,11 +96,11 @@ class UI {
       });
     }
 
-    if (data.emails.length) {
-      renderContactInfo(data.emails, 'Email', 'selected-email');
+    if (contact.emails.length) {
+      renderContactInfo(contact.emails, 'Email', 'selected-email');
     }
-    if (data.phoneNumbers.length) {
-      renderContactInfo(data.phoneNumbers, 'Telefon', 'selected-phone');
+    if (contact.phoneNumbers.length) {
+      renderContactInfo(contact.phoneNumbers, 'Telefon', 'selected-phone');
     }
   }
 
@@ -104,11 +119,19 @@ class UI {
     const name = document.querySelector('.name').value;
     const phone = document.querySelector('.phone').value;
     const email = document.querySelector('.email').value;
-    if (!name || !phone || !email) {
-      alert('All fields must be filled!');
+    const newFields = document.querySelectorAll('.new-input');
+    let phoneNumbers = [phone];
+    let emails = [email];
+    newFields.forEach(field => {
+      isNaN(field.value) ?
+        emails = [...emails, field.value] :
+        phoneNumbers = [...phoneNumbers, field.value];
+    });
+    if (!name) {
+      return alert('Name must not be empty!');
     } else {
-      Store.addContact(new Contact(name, phone, email));
-      UI.buildContact(new Contact(name, phone, email));
+      Store.addContact(new Contact(name, phoneNumbers, emails));
+      UI.buildContact(new Contact(name, phoneNumbers, emails));
       UI.clearFields();
     }
   }

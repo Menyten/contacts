@@ -16,9 +16,9 @@ class Store {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }
 
-  static removeContact(phoneNumber) {
+  static removeContact(name) {
     const contacts = Store.getContacts();
-    const filteredContacts = contacts.filter(contact => contact.phone !== phoneNumber);
+    const filteredContacts = contacts.filter(contact => contact.name !== name);
     localStorage.setItem('contacts', JSON.stringify(filteredContacts));
   }
 

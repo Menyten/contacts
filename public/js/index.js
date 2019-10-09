@@ -5,8 +5,6 @@ UI.buildHeaderAndMain();
 
 UI.renderContacts();
 
-UI.buildSelectedContact();
-
 Router.frontendRouter(location.pathname);
 
 window.addEventListener('click', e => {
@@ -16,10 +14,17 @@ window.addEventListener('click', e => {
     const link = e.target.closest('a').getAttribute('href');
     history.pushState(null, null, link);
     Router.frontendRouter(link);
+    if (e.target.classList.contains('select-contact')) {
+      // renderSelectedContact should take the contact object to render
+      console.log(link.substr(1));
+      
+      UI.renderSelectedContact(link.substr(1));
+    }
+  } else if (e.target.classList.contains('btn-field')) {
+    UI.insertNewField();
   } else if (e.target.classList.contains('btn-save')) {
     UI.addContact();
   } else if (e.target.classList.contains('delete')) {
     UI.removeContact(e);
   }
-
 });
