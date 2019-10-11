@@ -3,6 +3,10 @@ import Contact from './Contact.js';
 
 class UI {
 
+  static edit = false;
+
+  static contactBeforeEdit = '';
+
   static buildContact({ name }) {
     const contact = /*html*/`
     <article class="contact" id="${name}">
@@ -80,10 +84,13 @@ class UI {
     const contacts = Store.getContacts()
     const contact = contacts.find(({ name }) => name === contactName);
     console.log(contact);
-    
+
     const contactHtml = /*html*/`
       <div class="selected-container">
         <h1 class="selected-name">${contact.name}</h1>
+        <div class="btn-group">
+          <button class="btn-edit">Redigera</button>
+        </div>
       </div>`;
     document.querySelector('.selected-contact').innerHTML = contactHtml;
 
@@ -91,7 +98,7 @@ class UI {
       arrayOfInfo.forEach(info => {
         const element = document.createElement('p');
         element.classList.add(`${cssClass}`);
-        element.innerHTML = `${title}: <span>${info}</span>`
+        element.innerHTML = `${title}: <span class="contact-spans">${info}</span>`
         document.querySelector('.selected-name').insertAdjacentElement('afterend', element);
       });
     }
@@ -134,6 +141,45 @@ class UI {
       UI.buildContact(new Contact(name, phoneNumbers, emails));
       UI.clearFields();
     }
+  }
+
+  static toggleEditContact() {
+    const fields = document.querySelectorAll('.contact-spans');
+    if (!UI.edit) {
+      UI.contactBeforeEdit = document.querySelector('.selected-container').outerHTML;
+      document.querySelector('.btn-edit').innerHTML = 'Avbryt';
+      const saveButton = document.createElement('button')
+      saveButton.classList.add('btn-save-edit')
+      saveButton.innerHTML = 'Spara';
+      document.querySelector('.btn-group').append(saveButton);
+      fields.forEach(field => field.contentEditable = true);
+      UI.edit = true;
+    } else {
+      fields.forEach(field => field.contentEditable = 'inherit');
+      document.querySelector('.selected-contact').innerHTML = UI.contactBeforeEdit;
+      UI.edit = false;
+    }
+
+
+
+  }
+
+  static saveUpdatedContact() {
+    const name = document.querySelector('.selected-name').innerHTML;
+    const fields = document.querySelectorAll('.contact-spans');
+    const editButton = document.querySelector('.btn-edit');
+    const saveButton = document.querySelector('.btn-save-edit');
+    let phoneNumbers = [];
+    let emails = [];
+    fields.forEach(field => isNaN(field.innerHTML) ?
+      emails = [...emails, field.innerHTML] :
+      phoneNumbers = [...phoneNumbers, field.innerHTML]
+    );
+    Store.updateContact(new Contact(name, phoneNumbers, emails));
+    saveButton.remove();
+    editButton.innerHTML = 'Redigera';
+    fields.forEach(field => field.contentEditable = 'inherit');
+    UI.edit = false;
   }
 
   static removeContact(e) {

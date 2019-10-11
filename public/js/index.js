@@ -23,6 +23,10 @@ window.addEventListener('click', e => {
     UI.addContact();
   } else if (e.target.classList.contains('delete')) {
     UI.removeContact(e);
+  } else if (e.target.classList.contains('btn-edit')) {
+    UI.toggleEditContact();
+  } else if (e.target.classList.contains('btn-save-edit')) {
+    UI.saveUpdatedContact();
   }
 });
 

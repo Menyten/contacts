@@ -1,5 +1,11 @@
 class Store {
 
+  static addContact(contact) {
+    let contacts = Store.getContacts();
+    contacts = [...contacts, contact];
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }
+
   static getContacts() {
     let contacts;
     if (localStorage.getItem('contacts') === null) {
@@ -10,10 +16,13 @@ class Store {
     return contacts;
   }
 
-  static addContact(contact) {
-    let contacts = Store.getContacts();
-    contacts = [...contacts, contact];
-    localStorage.setItem('contacts', JSON.stringify(contacts));
+  static updateContact(updatedContact) {
+    console.log('updated', updatedContact);
+    const contacts = Store.getContacts();
+    let filteredContacts = contacts.filter(contact => contact.name !== updatedContact.name);
+    
+    filteredContacts = [...filteredContacts, updatedContact];
+    localStorage.setItem('contacts', JSON.stringify(filteredContacts));
   }
 
   static removeContact(name) {
