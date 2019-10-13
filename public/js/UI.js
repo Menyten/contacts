@@ -146,13 +146,34 @@ class UI {
   static toggleEditContact() {
     const fields = document.querySelectorAll('.contact-spans');
     if (!UI.edit) {
-      UI.contactBeforeEdit = document.querySelector('.selected-container').outerHTML;
+      const selectedContainer = document.querySelector('.selected-container');
+      const btnGroup = document.querySelector('.btn-group')
+      const newFieldContainer = document.createElement('div');
+      const input = document.createElement('input');
+      const addButton = document.createElement('button');
+      newFieldContainer.className = 'new-detail-container';
+      input.setAttribute('type', 'text');
+      input.className = 'edit-input';
+      addButton.innerHTML = 'Lägg till';
+      addButton.className = 'new-detail-button';
+      newFieldContainer.append(input);
+      newFieldContainer.append(addButton);
+      UI.contactBeforeEdit = selectedContainer.outerHTML;
+      selectedContainer.insertBefore(newFieldContainer, btnGroup);
       document.querySelector('.btn-edit').innerHTML = 'Avbryt';
+
       const saveButton = document.createElement('button')
       saveButton.classList.add('btn-save-edit')
       saveButton.innerHTML = 'Spara';
-      document.querySelector('.btn-group').append(saveButton);
-      fields.forEach(field => field.contentEditable = true);
+      btnGroup.append(saveButton);
+
+      fields.forEach(field => {
+        field.contentEditable = true
+        const button = document.createElement('button');
+        button.className = 'delete-detail';
+        button.innerHTML = 'Ta bort';
+        field.parentNode.append(button);
+      });
       UI.edit = true;
     } else {
       fields.forEach(field => field.contentEditable = 'inherit');
@@ -165,6 +186,9 @@ class UI {
   }
 
   static saveUpdatedContact() {
+    document.querySelector('.new-detail-container').remove();
+    const allDeleteButtons = document.querySelectorAll('.delete-detail');
+    allDeleteButtons.forEach(button => button.remove());
     const name = document.querySelector('.selected-name').innerHTML;
     const fields = document.querySelectorAll('.contact-spans');
     const editButton = document.querySelector('.btn-edit');
@@ -180,6 +204,10 @@ class UI {
     editButton.innerHTML = 'Redigera';
     fields.forEach(field => field.contentEditable = 'inherit');
     UI.edit = false;
+  }
+
+  static removeDetail(e) {
+    e.target.parentNode.remove();
   }
 
   static removeContact(e) {

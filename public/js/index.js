@@ -27,6 +27,8 @@ window.addEventListener('click', e => {
     UI.toggleEditContact();
   } else if (e.target.classList.contains('btn-save-edit')) {
     UI.saveUpdatedContact();
+  } else if (e.target.classList.contains('delete-detail')) {
+    UI.removeDetail(e)
   }
 });
 
