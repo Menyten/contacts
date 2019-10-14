@@ -29,6 +29,8 @@ window.addEventListener('click', e => {
     UI.saveUpdatedContact();
   } else if (e.target.classList.contains('delete-detail')) {
     UI.removeDetail(e)
+  } else if (e.target.classList.contains('new-detail-button')) {
+    UI.addNewDetailToContact();
   }
 });
 

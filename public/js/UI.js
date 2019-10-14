@@ -88,26 +88,41 @@ class UI {
     const contactHtml = /*html*/`
       <div class="selected-container">
         <h1 class="selected-name">${contact.name}</h1>
+        <div class="selected-phones-container"></div>
+        <div class="selected-emails-container"></div>
         <div class="btn-group">
           <button class="btn-edit">Redigera</button>
         </div>
       </div>`;
     document.querySelector('.selected-contact').innerHTML = contactHtml;
 
-    const renderContactInfo = (arrayOfInfo, title, cssClass) => {
-      arrayOfInfo.forEach(info => {
-        const element = document.createElement('p');
-        element.classList.add(`${cssClass}`);
-        element.innerHTML = `${title}: <span class="contact-spans">${info}</span>`
-        document.querySelector('.selected-name').insertAdjacentElement('afterend', element);
-      });
-    }
+
 
     if (contact.emails.length) {
-      renderContactInfo(contact.emails, 'Email', 'selected-email');
+      UI.renderContactInfo(contact.emails, 'Email', 'selected-email');
     }
     if (contact.phoneNumbers.length) {
-      renderContactInfo(contact.phoneNumbers, 'Telefon', 'selected-phone');
+      UI.renderContactInfo(contact.phoneNumbers, 'Telefon', 'selected-phone');
+    }
+  }
+
+  static renderContactInfo(details, title, cssClass) {
+    console.log('hej');
+
+    if (Array.isArray(details)) {
+      details.forEach(info => {
+        const element = document.createElement('p');
+        element.classList.add(`${cssClass}`);
+        element.innerHTML = `${title}: <span class="contact-spans">${info}</span>`;
+        const classToUse = isNaN(info) ? '.selected-emails-container' : '.selected-phones-container';
+        document.querySelector(classToUse).append(element);
+      });
+    } else {
+      const element = document.createElement('p');
+      element.classList.add(`${cssClass}`);
+      element.innerHTML = `${title}: <span class="contact-spans">${details}</span><button class="delete-detail">Ta bort</button>`;
+      const classToUse = isNaN(details) ? '.selected-emails-container' : '.selected-phones-container';
+      document.querySelector(classToUse).append(element);
     }
   }
 
@@ -141,6 +156,14 @@ class UI {
       UI.buildContact(new Contact(name, phoneNumbers, emails));
       UI.clearFields();
     }
+  }
+
+  static addNewDetailToContact() {
+    const inputValue = document.querySelector('.edit-input').value;
+    const title = isNaN(inputValue) ? 'E-post' : 'Telefon';
+    const cssClass = isNaN(inputValue) ? 'selected-email' : 'selected-phone';
+
+    UI.renderContactInfo(inputValue, title, cssClass);
   }
 
   static toggleEditContact() {
