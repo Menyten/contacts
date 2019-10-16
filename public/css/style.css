@@ -220,3 +220,7 @@ main .search {
   cursor: pointer;
   opacity: 0.7;
 }
+
+.selected-contact-history {
+  margin-top: 2rem;
+}

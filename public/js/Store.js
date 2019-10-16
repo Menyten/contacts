@@ -20,6 +20,9 @@ class Store {
     console.log('updated', updatedContact);
     const contacts = Store.getContacts();
     let filteredContacts = contacts.filter(contact => contact.name !== updatedContact.name);
+    const contact = contacts.find(contact => contact.name === updatedContact.name);
+    
+    updatedContact.history = [...contact.history, updatedContact.history];
     
     filteredContacts = [...filteredContacts, updatedContact];
     localStorage.setItem('contacts', JSON.stringify(filteredContacts));

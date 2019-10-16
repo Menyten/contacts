@@ -7,6 +7,8 @@ class UI {
 
   static contactBeforeEdit = '';
 
+  static newHistory = { added: [], removed: [] };
+
   static buildContact({ name }) {
     const contact = /*html*/`
     <article class="contact" id="${name}">
@@ -52,7 +54,7 @@ class UI {
             <input type="number" class="phone"/>
           </div>
           <div class="input-group">
-            <label>E-post</label>
+            <label>Email</label>
             <input type="email" class="email"/>
           </div>
           <button type="button" class="btn-field">Lägg till nytt fält</button>
@@ -71,7 +73,7 @@ class UI {
     const fields = /* html */`
       <select id="select">
         <option value="phone">Mobil</option>
-        <option value="email">E-post</option>
+        <option value="email">Email</option>
       </select>
       <input type="text" class="new-input"/>
     `;
@@ -160,9 +162,10 @@ class UI {
 
   static addNewDetailToContact() {
     const inputValue = document.querySelector('.edit-input').value;
-    const title = isNaN(inputValue) ? 'E-post' : 'Telefon';
+    const title = isNaN(inputValue) ? 'Email' : 'Telefon';
     const cssClass = isNaN(inputValue) ? 'selected-email' : 'selected-phone';
 
+    UI.newHistory.added = [...UI.newHistory.added, inputValue];
     UI.renderContactInfo(inputValue, title, cssClass);
   }
 
@@ -197,8 +200,10 @@ class UI {
         button.innerHTML = 'Ta bort';
         field.parentNode.append(button);
       });
+      UI.renderContactHistory();
       UI.edit = true;
     } else {
+      UI.resetNewHistoryObject();
       fields.forEach(field => field.contentEditable = 'inherit');
       document.querySelector('.selected-contact').innerHTML = UI.contactBeforeEdit;
       UI.edit = false;
@@ -206,6 +211,25 @@ class UI {
 
 
 
+  }
+
+  static renderContactHistory() {
+    const name = document.querySelector('.selected-name').innerHTML;
+    const contact = Store.getContacts().find(contact => contact.name === name );
+    console.log('contact', contact);
+    contact.history.forEach(object => {
+      console.log(object);
+      
+    })
+    
+
+
+    const div = document.createElement('div');
+    div.className = 'selected-contact-history';
+    div.innerHTML = /* html */`
+      <h2 class="selected-history-header">Historik</h2>
+    `;
+    document.querySelector('.selected-contact').append(div);
   }
 
   static saveUpdatedContact() {
@@ -222,14 +246,19 @@ class UI {
       emails = [...emails, field.innerHTML] :
       phoneNumbers = [...phoneNumbers, field.innerHTML]
     );
-    Store.updateContact(new Contact(name, phoneNumbers, emails));
+    Store.updateContact(new Contact(name, phoneNumbers, emails, UI.newHistory));
     saveButton.remove();
     editButton.innerHTML = 'Redigera';
     fields.forEach(field => field.contentEditable = 'inherit');
     UI.edit = false;
+    document.querySelector('.selected-contact-history').remove();
+    UI.resetNewHistoryObject();
   }
 
   static removeDetail(e) {
+    const value = e.target.previousSibling.innerHTML;
+    UI.newHistory.removed = [...UI.newHistory.removed, value];
+
     e.target.parentNode.remove();
   }
 
@@ -239,9 +268,23 @@ class UI {
     parent.remove()
   };
 
+  static resetNewHistoryObject() {
+    UI.newHistory = { added: [], removed: [] };
+  }
 }
 
+/* 
+  Tryck redigera
+  Rendera historiken som en klickbar lista
+  Lägg till nytt nummer/epost och 
+  Pusha till historiken {object},
+  kanske två arrayer
+  en
+  added = [],
+  removed []?
+  
 
+*/
 
 
 
