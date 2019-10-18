@@ -216,20 +216,37 @@ class UI {
   static renderContactHistory() {
     const name = document.querySelector('.selected-name').innerHTML;
     const contact = Store.getContacts().find(contact => contact.name === name );
-    console.log('contact', contact);
-    contact.history.forEach(object => {
-      console.log(object);
-      
-    })
-    
-
-
     const div = document.createElement('div');
     div.className = 'selected-contact-history';
     div.innerHTML = /* html */`
       <h2 class="selected-history-header">Historik</h2>
     `;
     document.querySelector('.selected-contact').append(div);
+    console.log('contact', contact);
+    
+    contact.history.forEach(object => {
+      console.log(object);
+      UI.buildHistoryFromObject(object);
+    })
+    
+
+
+  }
+
+  static buildHistoryFromObject({added, removed}) {
+    const div = document.createElement('div');
+    const content = `
+      <div>
+        <h3>Tillagt</h3>
+        ${added.map(add => `<p>${add}</p>`).join('')}
+      </div>
+      <div>
+        <h3>Borttaget</h3>
+        ${removed.map(remove => `<p>${remove}</p>`).join('')}
+      </div>
+    `;
+    div.innerHTML += content;
+    document.querySelector('.selected-contact-history').append(div);
   }
 
   static saveUpdatedContact() {
