@@ -224,3 +224,23 @@ main .search {
 .selected-contact-history {
   margin-top: 2rem;
 }
+
+.history-object {
+  min-width: 10rem;
+  margin: 1.5rem 0;
+  border-bottom: 1px solid #fff;
+}
+
+.history-object .added-header,
+.history-object .removed-header {
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.history-object p {
+  margin-bottom: 0.25rem !important;
+}
+
+.history-object p:last-of-type {
+  margin-bottom: 1rem !important;
+}

@@ -235,13 +235,14 @@ class UI {
 
   static buildHistoryFromObject({added, removed}) {
     const div = document.createElement('div');
+    div.className = 'history-object'
     const content = `
-      <div>
-        <h3>Tillagt</h3>
+      <div class="added">
+        <h3 class="added-header">Tillagt</h3>
         ${added.map(add => `<p>${add}</p>`).join('')}
       </div>
-      <div>
-        <h3>Borttaget</h3>
+      <div class="removed">
+        <h3 class="removed-header">Borttaget</h3>
         ${removed.map(remove => `<p>${remove}</p>`).join('')}
       </div>
     `;
